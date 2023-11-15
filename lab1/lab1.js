@@ -1,7 +1,7 @@
 var exhibitions = [];
 
 exhibitions[0] = {
-    startDate: new Date("2023-11-14"),
+    startDate: new Date("2023-11-17"),
     Name: "Живопис", 
     Place: "Галерея мистецтв", 
     Organisator: "Мистецька асоціація"
@@ -24,7 +24,7 @@ exhibitions[3] = {
     Place: "Міська галерея"
 };
 exhibitions[4] = {
-    startDate: new Date("2023-11-7"),
+    startDate: new Date("2023-11-10"),
     Name: "Сучасне мистецтво", 
     Place: "Виставковий комплекс", 
     Organisator: "Мистецька група"

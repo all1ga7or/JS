@@ -27,7 +27,8 @@ function editCell(cell) {
     button.innerText = 'OK';
     button.onclick = function () {
         cell.textContent = input.value;
-        editContainer.remove();
+        editContainer.removeChild(input);
+        editContainer.removeChild(button)
     };
 
     editContainer.appendChild(input);
