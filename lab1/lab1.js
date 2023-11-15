@@ -19,7 +19,7 @@ exhibitions[2] = {
     Organisator: "Спільнота скульпторів"
 };
 exhibitions[3] = {
-    startDate: new Date("2023-12-30"),
+    startDate: new Date("2023-11-06"),
     Name: "Графіка", 
     Place: "Міська галерея"
 };
@@ -36,9 +36,11 @@ function calculateDays(startDate) {
     var exhibitionEndDate = new Date(startDate);
     exhibitionEndDate.setDate(startDate.getDate() + 7);
     var daysToEnd = Math.ceil((exhibitionEndDate - currentDate) / (1000 * 60 * 60 * 24));
+    var daysFromEnd = Math.ceil((currentDate - exhibitionEndDate) / (1000 * 60 * 60 * 24)) - 1;
     return {
         daysToStart: daysToStart,
-        daysToEnd: daysToEnd
+        daysToEnd: daysToEnd,
+        daysFromEnd: daysFromEnd
     };
 }
 
@@ -48,7 +50,7 @@ function exhibitionInfo(exhibition) {
     exhibitionInfo += "<td>" + exhibition.Name + "</td>";
     exhibitionInfo += "<td>" + exhibition.Place + "</td>";
     exhibitionInfo += "<td>" + (exhibition.Organisator || "Інформація відсутня") + "</td>";
-    exhibitionInfo += (daysInfo.daysToStart > 0) ? "<td>" + daysInfo.daysToStart + "</td>" : "<td>" + daysInfo.daysToEnd + "</td>";
+    exhibitionInfo += (daysInfo.daysToStart > 0) ? "<td>" + daysInfo.daysToStart + "</td>" : (daysInfo.daysFromEnd>=0)? "<td>" + daysInfo.daysFromEnd + "</td>" :"<td>" + daysInfo.daysToEnd + "</td>";
     exhibitionInfo += "</tr>";
 
     return exhibitionInfo;
@@ -60,6 +62,7 @@ function displayInfo(){
     } else {
         exhibitionsInfo.style.display = "block";
     }
+    var pastExhibitionTable  = "<h2>Інформація про минулі виставки:</h2><table><tr><th>Назва виставки</th><th>Місце проведення</th><th>Організатор</th><th>Днів після закінчення</th></tr>";
     var futureExhibitionsTable = "<h2>Інформація про майбутні виставки:</h2><table><tr><th>Назва виставки</th><th>Місце проведення</th><th>Організатор</th><th>Днів до початку</th></tr>";
     var currentExhibitionsTable =  "<h2>Інформація про поточні виставки:</h2><table><tr><th>Назва виставки</th><th>Місце проведення</th><th>Організатор</th><th>Днів до закінчення</th></tr>";
     for (var i = 0; i < exhibitions.length; i++) {
@@ -67,12 +70,16 @@ function displayInfo(){
         var daysInfo = calculateDays(exhibition.startDate);
         if (daysInfo.daysToStart > 0) {
             futureExhibitionsTable += exhibitionInfo(exhibition);
-        } else {
+        } else if(daysInfo.daysFromEnd < 0){
             currentExhibitionsTable += exhibitionInfo(exhibition);
         }
+        else {
+            pastExhibitionTable += exhibitionInfo(exhibition);
+        }
     }
+    pastExhibitionTable += "</table>";
     futureExhibitionsTable += "</table>";
     currentExhibitionsTable += "</table>";
-    var html = futureExhibitionsTable + currentExhibitionsTable;
+    var html = pastExhibitionTable + futureExhibitionsTable + currentExhibitionsTable;
     document.getElementById("exhibitions-info").innerHTML = html;
 }
